@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="jspsych/jspsych.js"></script>
+    <script src="jspsych/plugins/jspsych-video-keyboard-response.js"></script>
+    <script src="jspsych/plugins/jspsych-video-slider-response.js"></script>
+    <script src="jspsych/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych/plugins/jspsych-html-slider-response.js"></script>
+    <script src="jspsych/plugins/jspsych-survey-likert.js"></script>
+    <script src="jspsych/plugins/jspsych-instructions.js"></script>
+    <script src="jspsych/plugins/jspsych-survey-text.js"></script>
+    <script src="jspsych/plugins/jspsych-call-function.js"></script>
+    <link rel="stylesheet" href="jspsych/css/jspsych.css">
+  </head>
+  <body>
+
+<!--     <div id="videoDiv">
+     <video id="video" src="http://127.0.0.1:4001/videos/<?php $videoFileName?>" width="70%" controls>
+    </div>
+ -->
+  </body>
+  <script>
+
+
+// Initiate timeline 
+
+var timeline = [];
+
+// Set up task instructions
+
+var trial0 = {
+    type: 'instructions',
+    pages: [
+    'Thank you for agreeing to participate in our experiment!'+'</br>'+
+    'Feel free to begin whenever you are ready.'
+    ],
+    show_clickable_nav: true,
+    button_label_next: "Begin"
+};
+
+var trial1a = {
+    type: 'instructions',
+    pages: [
+    'In this experiment, you will see pictures on the screen.',
+    'On top of each picture, you will see hotspots showing where '+'<i>'+'another' +'</i>'+' agent paid attention as they looked at the picture.',
+    " For example, here the agent is paying attention to the bananas." +
+    '<br>' + 
+    '<img src="/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/example_image.jpg" height="500"></img>',
+    //'<img src="/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_2/61513.bmp_001.jpg" height="500"></img>',
+    ],
+    show_clickable_nav: true
+};
+
+var trial1b = {
+    type: 'instructions',
+    pages: [
+    'And here is the full sequence showing where the agent attended over time'
+    ],
+    show_clickable_nav: true,
+    button_label_next: "View Full Sequence"
+}
+
+var trial2 = {
+  type: 'video-keyboard-response',
+  sources:['/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/example.mp4'],
+  // sources: ['/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_1/54_61513.bmppp151_L1V1_freeview_veridical.mp4',','],
+  // prompt: ['And here is the full sequence showing where the viewer looked over time'],
+  // autoplay: false,
+  // controls: true,
+  choices: "NO_KEYS",
+  trial_ends_after_video: true,
+  height:500
+};
+
+var trial3 = {
+    type: 'instructions',
+    pages: [
+    //Notice that not all of the hotspots are neatly drawn.
+    'The hotspots may not always be neatly drawn. There might be some fuzzy or confusing parts.',
+    'Just try to get a basic sense of where the agent is attending and how they move their attention over time.',
+    "Here's how the experiment will work...",
+    '<p>Sometimes, you will see a picture with '+'<span style="color:Black;">'+'<u>'+"Agent A's"+'</u>'+'</span>'+' attention moving across it.'+'</p>'+'<p>'+'Other times, you will see a picture with '+'<span style="color:Black;">'+'<u>'+"Agent B's"+'</u>'+'</span>'+' attention moving across it.</p>',
+    'Pay close attention to the ways' +'<span style="color:Black;">'+' Agent A'+'</span>'+' and ' +'<span style="color:Black;">'+'Agent B '+'</span>'+'move their attention.'+'<br/><br>'+'After each set of videos, you will decide which agent was a real person and which was fake.'
+    ],
+    show_clickable_nav: true
+};
+
+var trial3b = {
+  type:'instructions',
+  pages: [
+      'The experiment is split up into seven chunks, with breaks in between.'+'</br></br>'+'You can begin the first chunk whenever you are ready!'
+      ],
+  show_clickable_nav:true,
+  button_label_next: "Begin"
+}
+
+// Push instructions to timeline
+timeline.push(trial0)
+timeline.push(trial1a)
+timeline.push(trial1b)
+timeline.push(trial2)
+timeline.push(trial3)
+timeline.push(trial3b)
+
+// Set up break trial instructions
+
+var break1 = {
+    type: 'instructions',
+    pages: [
+    "Great job! You've completed the first block of the experiment.",
+    "Feel free to take a break and relax.",
+    "Whenever you're ready to continue, click 'Next'."
+    ],
+    show_clickable_nav: true
+};
+
+var break2 = {
+    type: 'instructions',
+    pages: [
+    "You've just completed the second block. Five more to go!",
+    "Feel free to take a break and relax.",
+    "Whenever you're ready, you can hit 'Next' to start the next block"
+    ],
+    show_clickable_nav: true
+};
+
+var break3 = {
+    type: 'instructions',
+    pages: [
+    "You've just completed the third block. Four more to go!",
+    "Feel free to take a break and relax.",
+    "Whenever you're ready, you can hit 'Next' to start the next block"
+    ],
+    show_clickable_nav: true
+};
+
+var break4 = {
+    type: 'instructions',
+    pages: [
+    "You've just completed the fourth block. Three more to go!",
+    "Feel free to take a break and relax.",
+    "Whenever you're ready, you can hit 'Next' to start the next block"
+    ],
+    show_clickable_nav: true
+};
+
+var break5 = {
+    type: 'instructions',
+    pages: [
+    "You've just completed the fifth block. Two more to go!",
+    "Feel free to take a break and relax.",
+    "Whenever you're ready, you can hit 'Next' to start the next block"
+    ],
+    show_clickable_nav: true
+};
+
+var break6 = {
+    type: 'instructions',
+    pages: [
+    "You've just completed the sixth block. One more to go!",
+    "Feel free to take a break and relax.",
+    "Whenever you're ready, you can hit 'Next' to start the next block"
+    ],
+    show_clickable_nav: true
+};
+
+var verify = {
+    type: 'instructions',
+    pages: [
+    "You're about to begin the next block.",
+    "Remember, for each set of videos, you'll be judging which agent is the real human.",
+    "Click 'Next' to begin!"
+    ],
+    show_clickable_nav: true
+}
+
+var breaks=[break1, break2, break3, break4, break5, break6]
+
+
+// Create video stimuli 
+
+//function for getting a random integer in javascript
+function getRndInteger(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+// make an array containing all of the veridical videos 
+var veridical_videos = [
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_107930.bmppp51_L1V1_freeview_veridical.mp4',    
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592017.bmppp64_L1V1_freeview_veridical.mp4',   
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_285905.bmppp151_L1V1_freeview_veridical.mp4',   
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713418.bmppp81_L1V1_freeview_veridical.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1159318.bmppp98_L1V1_freeview_veridical.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592025.bmppp57_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_285932.bmppp151_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713450.bmppp154_L1V1_freeview_veridical.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1159353.bmppp151_L1V1_freeview_veridical.mp4',  '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592079.bmppp71_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_285933.bmppp52_L1V1_freeview_veridical.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713593.bmppp75_L1V1_freeview_veridical.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1159365.bmppp58_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592119.bmppp63_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_285959.bmppp71_L1V1_freeview_veridical.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713633.bmppp57_L1V1_freeview_veridical.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1159425.bmppp58_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592133.bmppp63_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_285992.bmppp64_L1V1_freeview_veridical.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713707.bmppp154_L1V1_freeview_veridical.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1159440.bmppp98_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592137.bmppp52_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_286066.bmppp151_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713760.bmppp75_L1V1_freeview_veridical.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1159463.bmppp63_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592189.bmppp151_L1V1_freeview_veridical.mp4',  '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_497950.bmppp51_L1V1_freeview_veridical.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713765.bmppp93_L1V1_freeview_veridical.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1159486.bmppp98_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592233.bmppp58_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_497974.bmppp98_L1V1_freeview_veridical.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713769.bmppp58_L1V1_freeview_veridical.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1159508.bmppp154_L1V1_freeview_veridical.mp4',  '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592286.bmppp57_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_498108.bmppp75_L1V1_freeview_veridical.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713770.bmppp52_L1V1_freeview_veridical.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1159819.bmppp52_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592530.bmppp89_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_498258.bmppp76_L1V1_freeview_veridical.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713786.bmppp68_L1V1_freeview_veridical.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1160062.bmppp71_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592568.bmppp93_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_498280.bmppp81_L1V1_freeview_veridical.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713788.bmppp81_L1V1_freeview_veridical.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1160140.bmppp76_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592836.bmppp68_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_498326.bmppp63_L1V1_freeview_veridical.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713858.bmppp75_L1V1_freeview_veridical.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1160189.bmppp89_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592857.bmppp64_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_498339.bmppp63_L1V1_freeview_veridical.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713888.bmppp68_L1V1_freeview_veridical.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_150273.bmppp57_L1V1_freeview_veridical.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592874.bmppp64_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_498398.bmppp93_L1V1_freeview_veridical.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713920.bmppp76_L1V1_freeview_veridical.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_150303.bmppp68_L1V1_freeview_veridical.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1593041.bmppp89_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_712977.bmppp68_L1V1_freeview_veridical.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713936.bmppp76_L1V1_freeview_veridical.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_150432.bmppp81_L1V1_freeview_veridical.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1593056.bmppp51_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713174.bmppp154_L1V1_freeview_veridical.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1591838.bmppp154_L1V1_freeview_veridical.mp4',  '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_285807.bmppp51_L1V1_freeview_veridical.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713228.bmppp51_L1V1_freeview_veridical.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1591909.bmppp89_L1V1_freeview_veridical.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_285851.bmppp64_L1V1_freeview_veridical.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713371.bmppp93_L1V1_freeview_veridical.mp4', '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713652.bmppp71_L1V1_freeview_veridical.mp4'
+
+]
+
+
+//var veridical_videos = ['1592017.bmp_freeview_veridical.mp4',','713633.bmp_ScrambledAttention_10'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_movie.mp4',','1592017.bmp_freeview_veridical.mp4',',']
+
+// make a corresponding array containing all of the scrambled videos
+
+var scrambled_videos = [
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_107930.bmppp51_L1V1_freeview_scrambled.mp4',    
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592017.bmppp64_L1V1_freeview_scrambled.mp4',   
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_285905.bmppp151_L1V1_freeview_scrambled.mp4',   
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713418.bmppp81_L1V1_freeview_scrambled.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1159318.bmppp98_L1V1_freeview_scrambled.mp4', '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592025.bmppp57_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_285932.bmppp151_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713450.bmppp154_L1V1_freeview_scrambled.mp4','/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1159353.bmppp151_L1V1_freeview_scrambled.mp4',  '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592079.bmppp71_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_285933.bmppp52_L1V1_freeview_scrambled.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713593.bmppp75_L1V1_freeview_scrambled.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1159365.bmppp58_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592119.bmppp63_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_285959.bmppp71_L1V1_freeview_scrambled.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713633.bmppp57_L1V1_freeview_scrambled.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1159425.bmppp58_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592133.bmppp63_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_285992.bmppp64_L1V1_freeview_scrambled.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713707.bmppp154_L1V1_freeview_scrambled.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1159440.bmppp98_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592137.bmppp52_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_286066.bmppp151_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713760.bmppp75_L1V1_freeview_scrambled.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1159463.bmppp63_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592189.bmppp151_L1V1_freeview_scrambled.mp4',  '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_497950.bmppp51_L1V1_freeview_scrambled.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713765.bmppp93_L1V1_freeview_scrambled.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1159486.bmppp98_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592233.bmppp58_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_497974.bmppp98_L1V1_freeview_scrambled.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713769.bmppp58_L1V1_freeview_scrambled.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1159508.bmppp154_L1V1_freeview_scrambled.mp4',  '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592286.bmppp57_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_498108.bmppp75_L1V1_freeview_scrambled.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713770.bmppp52_L1V1_freeview_scrambled.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1159819.bmppp52_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592530.bmppp89_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_498258.bmppp76_L1V1_freeview_scrambled.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713786.bmppp68_L1V1_freeview_scrambled.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1160062.bmppp71_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592568.bmppp93_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_498280.bmppp81_L1V1_freeview_scrambled.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713788.bmppp81_L1V1_freeview_scrambled.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1160140.bmppp76_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592836.bmppp68_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_498326.bmppp63_L1V1_freeview_scrambled.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713858.bmppp75_L1V1_freeview_scrambled.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1160189.bmppp89_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592857.bmppp64_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_498339.bmppp63_L1V1_freeview_scrambled.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713888.bmppp68_L1V1_freeview_scrambled.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_150273.bmppp57_L1V1_freeview_scrambled.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1592874.bmppp64_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_498398.bmppp93_L1V1_freeview_scrambled.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713920.bmppp76_L1V1_freeview_scrambled.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_150303.bmppp68_L1V1_freeview_scrambled.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1593041.bmppp89_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_712977.bmppp68_L1V1_freeview_scrambled.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713936.bmppp76_L1V1_freeview_scrambled.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_150432.bmppp81_L1V1_freeview_scrambled.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1593056.bmppp51_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713174.bmppp154_L1V1_freeview_scrambled.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1591838.bmppp154_L1V1_freeview_scrambled.mp4',  '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_285807.bmppp51_L1V1_freeview_scrambled.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713228.bmppp51_L1V1_freeview_scrambled.mp4',
+'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_1591909.bmppp89_L1V1_freeview_scrambled.mp4',   '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_285851.bmppp64_L1V1_freeview_scrambled.mp4',    '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713371.bmppp93_L1V1_freeview_scrambled.mp4', '/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_713652.bmppp71_L1V1_freeview_scrambled.mp4'
+]
+
+// var scrambled_videos = ['1592017.bmp_freeview_veridical.mp4',','713633.bmp_ScrambledAttention_10'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/'/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_3/STIM_SET_1/0_movie.mp4',','1592017.bmp_freeview_veridical.mp4',',']
+
+// array of both possible prompts, viewers A and B
+var viewer_list = ['<span style="color:Black; font-size:50px;">'+'Agent A','<span style="color:Black; font-size:50px;">'+'Agent B']
+
+
+// loop through the total number of trials you want in the experiment
+
+// UNCOMMENT THE LINE BELOW TO USE ALL STIMULI
+var num_trials = veridical_videos.length
+
+// var num_trials = 5
+
+// start block tracker to track what block we're in
+var block = 0
+
+// trial type to hide cursor while videos display
+var cursor_off = {
+    type: 'call-function',
+    func: function() {
+        document.body.style.cursor= "none";
+    }
+}
+
+// trial type to turn cursor back on after videos display
+var cursor_on = {
+    type: 'call-function',
+    func: function() {
+        document.body.style.cursor= "auto";
+    }
+}
+
+// (in our case, this is the same as the total number of videos)
+for(i=0; i<num_trials; i++){
+
+  index = getRndInteger(0,veridical_videos.length-1)
+
+  // make stim_list
+  stim_list   = [veridical_videos[index],scrambled_videos[index]]
+
+  // make condition_list
+  cond_list   = ['veridical','scrambled']
+
+  // get rid of these from the full array (no repeats)
+  veridical_videos.splice(index,1); scrambled_videos.splice(index,1)
+
+  // select at random which item to show first
+  first_stim    = getRndInteger(0,1)
+  second_stim   = Math.abs(first_stim-1)
+
+  // based on first_stim, determine which judgement is correct
+  if (first_stim==0){
+    corr = 0
+  } else {
+    corr = 1
+  }
+
+  // Make confidence judgement trial
+  var confidence = {
+      type: 'survey-likert',
+      questions: [
+        {
+          prompt: "How confident are you in your answer?",
+          name: "confidence", 
+          labels: [
+            "1"+'<br/>'+"Very"+ '<br/>'+"unsure", 
+            "2"+'<br/>'+"A little "+'<br/>'+ "unsure",  
+            "3"+'<br/>'+"A little confident", 
+            "4"+'<br/>'+"Very confident"
+          ],required: true
+          }
+        ],
+      };
+
+  // select at random which is first, viewer A or viewer B  
+  // first_viewer  = getRndInteger(0,1)
+  // second_viewer = Math.abs(first_viewer-1)
+
+  var viewer1 = {
+      type: 'html-keyboard-response',
+      stimulus: [viewer_list[0]],
+      stimulus_duration: 3000,
+      trial_duration: 3000,
+  };
+
+  var video1 = {
+      type: 'video-keyboard-response',
+      sources: [stim_list[first_stim]],
+      prompt: [viewer_list[0]],
+      choices: "NO_KEYS",
+      trial_ends_after_video: true,
+      height:500,
+      condition: [cond_list[first_stim]],
+      data: {
+        agent:     'Agent A',
+        condition: cond_list[first_stim],
+        image:     stim_list[first_stim]
+      }
+  };
+
+  var viewer2 = {
+      type: 'html-keyboard-response',
+      stimulus: [viewer_list[1]],
+      stimulus_duration: 3000,
+      trial_duration: 3000,
+      //choices: "NO_KEYS"
+  };
+
+  var video2 = {
+      type: 'video-keyboard-response',
+      sources: [stim_list[second_stim]],
+      prompt: [viewer_list[1]],
+      choices: "NO_KEYS",
+      trial_ends_after_video: true,
+      height:500,
+      condition:[cond_list[second_stim]],
+      data: {
+        agent:     'Agent B',
+        condition: cond_list[second_stim],
+        image:     stim_list[second_stim]
+      }
+  };
+
+  var judge = {
+    type: 'survey-likert',
+    questions: 
+    [
+    {prompt: "Which one was the real human?", name:"judgement", labels: ['<span style="color:Black; font-size:20px;">'+'Agent A'+'</span>', '<span style="color:Black; font-size:20px;">'+'Agent B'+'</span>'],required: true}
+    ],
+
+    data: {
+    correct_answer: corr
+    }};
+
+  timeline.push(cursor_off)
+  timeline.push(viewer1)
+  timeline.push(video1)
+  timeline.push(viewer2)
+  timeline.push(video2)
+  timeline.push(cursor_on)
+  timeline.push(judge)
+  timeline.push(confidence)
+
+  // if length(i)/16 has no remainder
+  if (((i+1)%10==0)&&(i!=69)){
+    timeline.push(breaks[block])
+    timeline.push(verify)
+    block+=1
+  }
+  }
+
+// Create ending trials
+
+var closing0 = {
+    type: 'instructions',
+    pages: [
+    "Awesome job! You have finished the last block." +'</br></br>'+'We just have three final questions for you.'
+    ],
+    show_clickable_nav: true
+};
+
+var closing1 = {
+  type: 'survey-text',
+  // preamble: `<img src="img/navarro_burst_03.jpg" style="width:400px;"></img>`,
+  questions: [
+    {prompt: 'Question 1: Please briefly describe your experience - specifically, tell us anything you think it would be important for us to know!', rows: 5}
+  ]
+}
+
+var closing2 = {
+  type: 'survey-text',
+  // preamble: `<img src="img/navarro_burst_03.jpg" style="width:400px;"></img>`,
+  questions: [
+    {prompt: 'What did you find easiest about the experiment? Did you use any particular strategies?', rows: 5}
+  ]
+}
+
+
+var closing3 = {
+  type: 'survey-text',
+  // preamble: `<img src="img/navarro_burst_03.jpg" style="width:400px;"></img>`,
+  questions: [
+    {prompt: 'What did %you find most difficult about the experiment?', rows: 5}
+  ]
+}
+
+
+var closing4 = {
+    type: 'instructions',
+    pages: [
+    "That's it, you're all done!"+'</br>'+"Thank you for your participation!"
+    ],
+    trial_duration: 30,
+    show_clickable_nav: true,
+    button_label_next: "End Experiment"
+};
+
+timeline.push(closing0)
+timeline.push(closing1)
+timeline.push(closing2)
+timeline.push(closing3)
+timeline.push(closing4)
+
+// Run the experiment
+
+jsPsych.init({
+  timeline: timeline,
+  override_safe_mode: false,
+  // preload_videos: ["fish.mp4',',"],
+  on_finish: function(){
+    jsPsych.data.displayData('json')
+    jsPsych.data.get().localSave('csv','SS_SCRAMBLE_PILOT.csv');
+    jsPsych.data.get().localSave('json','SS_SCRAMBLE_PILOT.json');
+  }
+  })
+</script>
+</html>
