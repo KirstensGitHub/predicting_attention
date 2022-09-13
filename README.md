@@ -7,4 +7,6 @@ This includes code used to:
 - run the experiment (`./experiment`)
 - analyze the resulting data (`./analysis`)
 
-The anonmyzed dataset is publicly available at [LINK HERE]
+The anonmyzed dataset from these experiments are publicly available at [LINK HERE]
+
+The full published research article is publicly available at [LINK]
