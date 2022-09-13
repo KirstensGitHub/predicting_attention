@@ -1,4 +1,4 @@
-# attention_judgement
+# Attention Judgement
 
 This repository contains all code pertaining to the Attention Judgement experiments.
 
