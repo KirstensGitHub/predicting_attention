@@ -8,8 +8,8 @@ This includes code used to:
 - analyze the resulting data (`./analysis`)
 
 
-The full stimulus set is publicly available at [HERE]
+The full stimulus set is publicly available at [LINK HERE]
 
 The anonmyzed data from these experiments are publicly available at [LINK HERE]
 
-The full published research article is publicly available at [LINK]
+The full published research article is publicly available at [LINK HERE]
