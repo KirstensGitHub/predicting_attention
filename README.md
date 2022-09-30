@@ -7,7 +7,6 @@ This includes code used to:
 - run the experiment (`./experiment`)
 - analyze the resulting data (`./analysis`)
 
-----------------------------------------------------------
 
 The full stimulus set is publicly available at [HERE]
 
