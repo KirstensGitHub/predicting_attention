@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="jspsych/jspsych.js"></script>
+    <script src="jspsych/plugins/jspsych-video-keyboard-response.js"></script>
+    <script src="jspsych/plugins/jspsych-video-slider-response.js"></script>
+    <script src="jspsych/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych/plugins/jspsych-html-slider-response.js"></script>
+    <script src="jspsych/plugins/jspsych-survey-likert.js"></script>
+    <script src="jspsych/plugins/jspsych-instructions.js"></script>
+    <script src="jspsych/plugins/jspsych-survey-text.js"></script>
+    <script src="jspsych/plugins/jspsych-survey-multi-select.js"></script>
+    <script src="jspsych/plugins/jspsych-call-function.js"></script>
+    <link rel="stylesheet" href="jspsych/css/jspsych.css">
+  </head>
+  <body>
+
+<!--     <div id="videoDiv">
+     <video id="video" src="http://127.0.0.1:4001/videos/<?php $videoFileName?>" width="70%" controls>
+    </div>
+ -->
+  </body>
+  <script>
+
+
+// Initiate timeline
+var timeline = [];
+
+// create random subject ID with 8 alphanumeric characters
+var rand_subject_id = jsPsych.randomization.randomID(8);
+
+// add the ID to the data for all trials
+jsPsych.data.addProperties({ID: rand_subject_id});
+
+// questions for experimenter
+var experimenter = {
+  type: 'survey-multi-select',
+  questions: [
+    {
+      prompt: '<b>'+"EXPERIMENTER FILL OUT"+'</b>'+'</b>'+'<br/>'+"I have done the following:",
+      options: ["Confirmed subject's identity (ID card)",
+      "Confirmed normal or corrected-to-normal vision",
+      "Obtained consent (signature and date)",
+      "Checked the test room lighting",
+      "Checked computer screen lighting",
+      "Checked distance from screen to chin rest (50cm)",
+      "Cleaned and adjusted chin rest",
+      "Counterbalanced the order of the tasks",
+      "Opened the experiment in Firefox",
+      "Made the experiment full screen",
+      "Encouraged subject to silence phone, put away distractors, etc."],
+      //horizontal: true,
+      required: true,
+      name: 'Experimenter'
+    },
+  ],
+};
+
+// trial type to hide cursor while videos display
+var cursor_off = {
+    type: 'call-function',
+    func: function() {
+        document.body.style.cursor= "none";
+    }
+}
+
+// trial type to turn cursor back on after videos display
+var cursor_on = {
+    type: 'call-function',
+    func: function() {
+        document.body.style.cursor= "auto";
+    }
+}
+
+// Set up task instructions
+var trial0 = {
+    type: 'instructions',
+    pages: [
+    'Thank you for agreeing to participate in our experiment!'+'</br>'+
+    'Feel free to begin whenever you are ready.'
+    ],
+    show_clickable_nav: true,
+    button_label_next: "Begin"
+};
+
+var demographics = {
+
+  type: 'survey-likert',
+  questions: [
+    {
+      prompt: "First, please provide some demographic information. What is your age?",
+      labels: ['18','19','20','21','22','23','24','25','26','27','28',
+      '29','30', '30+'],
+      //horizontal: true,
+      required: true,
+      name: 'Age'
+    },
+    {
+      prompt: "What was your sex assigned at birth?",
+      labels: ['Male','Female','Prefer not to respond'],
+      //horizontal: true,
+      required: true,
+      name: 'Sex'
+    },
+    {
+      prompt: "What gender do you identify with?",
+      labels: ['Male','Female','Non-binary / Other', 'Prefer not to respond'],
+      //horizontal: true,
+      required: true,
+      name: 'Gender'
+    }
+  ],
+  randomize_question_order: false
+};
+
+var demographics1 = {
+  type: 'instructions',
+  pages: [
+  "Thanks! Let's continue to the instructions..."
+  ],
+  show_clickable_nav: true,
+  button_label_next: "Begin Instructions"
+}
+
+var trial0a = {
+  type: 'instructions',
+  pages: [
+    'As researchers who study attention, we have made videos that represent attention moving across images.','In this experiment, you will watch these videos and tell us what you think of them.'
+  ],
+  show_clickable_nav: true
+}
+
+var trial1a = {
+    type: 'instructions',
+    pages: [
+    'In each video, you will see a picture on the screen.',
+    'On top of the picture, you will see hotspots representing attention.',
+    " For example, in this picture, the attention is on the bananas." +
+    '<br>' +
+    '<img src="EXAMPLE_STIM/example_image.jpg" height="500"></img>',
+    ],
+    show_clickable_nav: true
+};
+
+var trial1b = {
+    type: 'instructions',
+    pages: [
+    'And here is the full video of attention over time'
+    ],
+    show_clickable_nav: true,
+    button_label_next: "View Full Video"
+}
+
+var trial2 = {
+  type: 'video-keyboard-response',
+  sources:['EXAMPLE_STIM/example.mp4'],
+  choices: "NO_KEYS",
+  trial_ends_after_video: true,
+  height:500
+};
+
+var trial3 = {
+    type: 'instructions',
+    pages: [
+    'The hotspots may not always be neatly drawn. There might be some fuzzy or confusing parts.',
+    'Just try to get a basic sense of how the attention moves over time.',
+    "Here's how the experiment will work...",
+    '<p>You will watch one attention video at a time, and then you will rate the video using four rating scales.'
+    ],
+    show_clickable_nav: true,
+    button_label_next: "Next"
+};
+
+var trial3aa = {
+    type: 'instructions',
+    pages: [
+    "Let's try out a practice round now!"
+    ],
+    show_clickable_nav: true,
+    button_label_next: "Try It Out"
+};
+
+var trial3a = {
+  type: 'video-keyboard-response',
+  sources:['EXAMPLE_STIM/example.mp4'],
+  choices: "NO_KEYS",
+  trial_ends_after_video: true,
+  height:500
+};
+
+var trial3b = {
+      type: 'survey-likert',
+      questions: [
+        {
+          prompt:"When I saw the attention hotspots, I felt that another conscious agent was looking at the image.",
+          name: "pre-1",
+          labels: [
+            "1"+'<br/>'+"No /"+'<br/>'+"Very little",
+            "2"+'<br/>'+"A little"+'<br/>'+"but mostly no",
+            "3"+'<br/>'+"Mostly yes",
+            "4"+'<br/>'+"Yes /"+'<br/>'+"Very much"
+          ],required: true
+          }
+        ],
+      }
+
+var trial3c = {
+      type: 'survey-likert',
+      questions: [
+        {
+          prompt: "It felt like the attention was moving in the same ways I move my own attention.",
+          name: "pre-2",
+          labels: [
+            "1"+'<br/>'+"No /"+'<br/>'+"Very little",
+            "2"+'<br/>'+"A little"+'<br/>'+"but mostly no",
+            "3"+'<br/>'+"Mostly yes",
+            "4"+'<br/>'+"Yes /"+'<br/>'+"Very much"
+          ],required: true
+          }
+        ],
+      }
+
+
+var trial3d = {
+      type: 'survey-likert',
+      questions: [
+        {
+          prompt: "It felt as if the attention on the screen was actually my own attention.",
+          name: "pre-3",
+          labels: [
+            "1"+'<br/>'+"No /"+'<br/>'+"Very little",
+            "2"+'<br/>'+"A little"+'<br/>'+"but mostly no",
+            "3"+'<br/>'+"Mostly yes",
+            "4"+'<br/>'+"Yes /"+'<br/>'+"Very much"
+          ],required: true
+          }
+        ],
+      }
+
+var trial3e = {
+      type: 'survey-likert',
+      questions: [
+        {
+          prompt: "The attention felt robotic or mechanical.",
+          name: "post-5",
+          labels: [
+            "1"+'<br/>'+"No /"+'<br/>'+"Very little",
+            "2"+'<br/>'+"A little"+'<br/>'+"but mostly no",
+            "3"+'<br/>'+"Mostly yes",
+            "4"+'<br/>'+"Yes /"+'<br/>'+"Very much"
+          ],required: true
+          }
+        ],
+      }
+
+var trial3f = {
+  type:'instructions',
+  pages: ["Good job! Now you're ready for the real experiment."
+      ],
+  show_clickable_nav:true,
+  button_label_next: "Next"
+}
+
+var trial3g = {
+  type:'instructions',
+  pages: [
+      'The experiment is split up into seven chunks (twenty videos each), with breaks in between.'+'</br></br>'+'You can begin the first chunk whenever you are ready!'
+      ],
+  show_clickable_nav:true,
+  button_label_next: "Begin"
+}
+
+// Push experimenter questions and task instructions to timeline
+timeline.push(experimenter)
+timeline.push(trial0)
+
+timeline.push(demographics)
+timeline.push(demographics1)
+
+timeline.push(trial0a)
+timeline.push(trial1a)
+timeline.push(trial1b)
+
+timeline.push(cursor_off)
+timeline.push(trial2)
+timeline.push(cursor_on)
+
+timeline.push(trial3)
+timeline.push(trial3aa)
+
+timeline.push(cursor_off)
+timeline.push(trial3a)
+timeline.push(cursor_on)
+
+timeline.push(trial3b)
+timeline.push(trial3c)
+timeline.push(trial3d)
+timeline.push(trial3e)
+timeline.push(trial3f)
+timeline.push(trial3g)
+
+// Set up break trial instructions
+
+var break1 = {
+    type: 'instructions',
+    pages: [
+    "Great job! You've completed the first chunk of the experiment.",
+    "Feel free to take a break and relax.",
+    "Whenever you're ready to continue, click 'Next'."
+    ],
+    show_clickable_nav: true
+};
+
+var break2 = {
+    type: 'instructions',
+    pages: [
+    "You've just completed the second chunk. Five more to go!",
+    "Feel free to take a break and relax.",
+    "Whenever you're ready, you can hit 'Next' to start the next chunk"
+    ],
+    show_clickable_nav: true
+};
+
+var break3 = {
+    type: 'instructions',
+    pages: [
+    "You've just completed the third chunk. Four more to go!",
+    "Feel free to take a break and relax.",
+    "Whenever you're ready, you can hit 'Next' to start the next chunk"
+    ],
+    show_clickable_nav: true
+};
+
+var break4 = {
+    type: 'instructions',
+    pages: [
+    "You've just completed the fourth chunk. Three more to go!",
+    "Feel free to take a break and relax.",
+    "Whenever you're ready, you can hit 'Next' to start the next chunk"
+    ],
+    show_clickable_nav: true
+};
+
+var break5 = {
+    type: 'instructions',
+    pages: [
+    "You've just completed the fifth chunk. Two more to go!",
+    "Feel free to take a break and relax.",
+    "Whenever you're ready, you can hit 'Next' to start the next chunk"
+    ],
+    show_clickable_nav: true
+};
+
+var break6 = {
+    type: 'instructions',
+    pages: [
+    "You've just completed the sixth chunk. One more to go!",
+    "Feel free to take a break and relax.",
+    "Whenever you're ready, you can hit 'Next' to start the next chunk"
+    ],
+    show_clickable_nav: true
+};
+
+var verify = {
+    type: 'instructions',
+    pages: [
+    "You're about to begin the next chunk.",
+    "Remember, for each set of videos, you'll be judging which agent is the real human.",
+    "Click 'Next' to begin!"
+    ],
+    show_clickable_nav: true
+}
+
+var breaks=[break1, break2, break3, break4, break5, break6]
+
+
+// Create video stimuli
+
+//function for getting a random integer in javascript
+function getRndInteger(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+// make an array containing all of the veridical videos
+var videos = [
+  'STIM_SET_1_REAL/1591876.bmp_pp63_L1_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592372.bmp_pp76_L1_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/498155.bmp_pp61_L2_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159440.bmp_pp98_L1_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592397.bmp_pp85_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/498175.bmp_pp154_L1_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159446.bmp_pp60_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592499.bmp_pp96_L2_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/498253.bmp_pp67_L2_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159447.bmp_pp70_L2_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592581.bmp_pp100_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/61537.bmp_pp73_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159515.bmp_pp84_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592619.bmp_pp56_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/712977.bmp_pp51_L1_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159572.bmp_pp71_L1_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592657.bmp_pp98_L1_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713017.bmp_pp152_L2_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159621.bmp_pp92_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592727.bmp_pp59_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713089.bmp_pp60_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159675.bmp_pp77_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592804.bmp_pp91_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713135.bmp_pp54_L2_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159768.bmp_pp89_L1_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592807.bmp_pp68_L1_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713211.bmp_pp100_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159777.bmp_pp77_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592817.bmp_pp55_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713371.bmp_pp68_L1_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159784.bmp_pp73_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592890.bmp_pp82_L2_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713403.bmp_pp80_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159813.bmp_pp79_L2_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592934.bmp_pp63_L1_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713513.bmp_pp62_L2_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159829.bmp_pp91_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1593035.bmp_pp94_L2_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713593.bmp_pp64_L1_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159855.bmp_pp99_L2_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1593041.bmp_pp58_L1_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713620.bmp_pp65_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159882.bmp_pp61_L2_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1593146.bmp_pp93_L1_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713666.bmp_pp97_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1160127.bmp_pp90_L2_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/285751.bmp_pp55_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713681.bmp_pp86_L2_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1160168.bmp_pp53_L2_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+   'STIM_SET_1_REAL/285905.bmp_pp57_L1_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1591994.bmp_pp69_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1591954.bmp_pp62_L2_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/285933.bmp_pp81_L1_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713707.bmp_pp154_L1_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1591961.bmp_pp67_L2_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/285994.bmp_pp92_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+   'STIM_SET_1_REAL/713749.bmp_pp88_L2_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713684.bmp_pp85_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/286001.bmp_pp54_L2_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713760.bmp_pp81_L1_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592133.bmp_pp75_L1_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/497950.bmp_pp151_L1_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713779.bmp_pp152_L2_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592286.bmp_pp52_L1_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/498170.bmp_pp153_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713796.bmp_pp84_L3_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592351.bmp_pp51_L1_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/498111.bmp_pp88_L2_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592362.bmp_pp95_L2_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/498149.bmp_pp99_L2_V1.0_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1591876.bmp_pp63_L1_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592372.bmp_pp76_L1_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/498155.bmp_pp61_L2_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159440.bmp_pp98_L1_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592397.bmp_pp85_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/498175.bmp_pp154_L1_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159446.bmp_pp60_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592499.bmp_pp96_L2_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/498253.bmp_pp67_L2_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159447.bmp_pp70_L2_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592581.bmp_pp100_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/61537.bmp_pp73_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159515.bmp_pp84_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592619.bmp_pp56_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/712977.bmp_pp51_L1_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159572.bmp_pp71_L1_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592657.bmp_pp98_L1_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713017.bmp_pp152_L2_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159621.bmp_pp92_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592727.bmp_pp59_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713089.bmp_pp60_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159675.bmp_pp77_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592804.bmp_pp91_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713135.bmp_pp54_L2_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159768.bmp_pp89_L1_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592807.bmp_pp68_L1_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713211.bmp_pp100_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159777.bmp_pp77_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592817.bmp_pp55_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713371.bmp_pp68_L1_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159784.bmp_pp73_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592890.bmp_pp82_L2_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713403.bmp_pp80_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159813.bmp_pp79_L2_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592934.bmp_pp63_L1_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713513.bmp_pp62_L2_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159829.bmp_pp91_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1593035.bmp_pp94_L2_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713593.bmp_pp64_L1_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159855.bmp_pp99_L2_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1593041.bmp_pp58_L1_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713620.bmp_pp65_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1159882.bmp_pp61_L2_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1593146.bmp_pp93_L1_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713666.bmp_pp97_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1160127.bmp_pp90_L2_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/285751.bmp_pp55_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713681.bmp_pp86_L2_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1160168.bmp_pp53_L2_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/285905.bmp_pp57_L1_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1591994.bmp_pp69_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1591954.bmp_pp62_L2_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/285933.bmp_pp81_L1_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713707.bmp_pp154_L1_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1591961.bmp_pp67_L2_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/285994.bmp_pp92_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713749.bmp_pp88_L2_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713684.bmp_pp85_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/286001.bmp_pp54_L2_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713760.bmp_pp81_L1_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592133.bmp_pp75_L1_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/497950.bmp_pp151_L1_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713779.bmp_pp152_L2_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592286.bmp_pp52_L1_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/498170.bmp_pp153_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/713796.bmp_pp84_L3_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592351.bmp_pp51_L1_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/498111.bmp_pp88_L2_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/1592362.bmp_pp95_L2_V1.0_scrambled_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_1_REAL/498149.bmp_pp99_L2_V1.0_scrambled_freeview_isoFalse_fps144.mp4'
+]
+
+
+// loop through the total number of trials you want in the experiment
+// for our purposes, this is all of the videos in the list
+var num_trials = videos.length
+
+// start block tracker to track what block we're in
+var block = 0
+
+// (in our case, this is the same as the total number of videos)
+for(i=0; i<num_trials; i++){
+
+  index = getRndInteger(0,videos.length-1)
+
+  // make stim_list
+  stim_list   = [videos[index]]
+
+  // get rid of this video from the full array (no repeats)
+  videos.splice(index,1); //scrambled_videos.splice(index,1)
+
+  var video = {
+      type: 'video-keyboard-response',
+      sources: stim_list,
+      choices: "NO_KEYS",
+      trial_ends_after_video: true,
+      height: 500,
+      data: {
+        agent:     'Agent A',
+        image:     stim_list
+      }
+  };
+
+  timeline.push(cursor_off)
+  timeline.push(video)
+  timeline.push(cursor_on)
+  //timeline.push(judge)
+  timeline.push(trial3b)
+  timeline.push(trial3c)
+  timeline.push(trial3d)
+  timeline.push(trial3e)
+
+
+  // if length(i)/20 has no remainder
+  if (((i+1)%20==0)&&(i!=139)){
+    timeline.push(breaks[block])
+    timeline.push(verify)
+    block+=1
+  }
+  }
+
+var closing4 = {
+    type: 'instructions',
+    pages: [
+    "That's it, you're all done!"+'</br>'+"Thank you for your participation!"
+    ],
+    trial_duration: 30,
+    show_clickable_nav: true,
+    button_label_next: "End Experiment"
+};
+
+var experimenter_end = {
+  type: 'survey-multi-select',
+  questions: [
+    {
+      prompt: '<b>'+"EXPERIMENTER FILL OUT"+'</b>'+'</b>'+'<br/>'+"I have done the following:",
+      options: [
+      "Printed ID# "+rand_subject_id+" on consent form",
+      "Given subject SONA credit or payment",
+      "Given the subject debrief form", ],
+      //horizontal: true,
+      required: true,
+      name: 'Experimenter_end'
+    },
+  ],
+};
+
+timeline.push(closing4)
+timeline.push(experimenter_end)
+
+// Run the experiment
+jsPsych.init({
+  timeline: timeline,
+  override_safe_mode: false,
+  on_finish: function(){
+    jsPsych.data.displayData('json')
+    jsPsych.data.get().localSave('csv',rand_subject_id+'_SUBJ_PILOT.csv');
+    jsPsych.data.get().localSave('json',rand_subject_id+'_SUBJ_PILOT.json');
+  }
+  })
+</script>
+</html>
