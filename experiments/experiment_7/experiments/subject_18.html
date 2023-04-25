@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="jspsych/jspsych.js"></script>
+    <script src="jspsych/plugins/jspsych-video-keyboard-response.js"></script>
+    <script src="jspsych/plugins/jspsych-video-slider-response.js"></script>
+    <script src="jspsych/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="jspsych/plugins/jspsych-image-keyboard-response.js"></script>
+    <script src="jspsych/plugins/jspsych-html-slider-response.js"></script>
+    <script src="jspsych/plugins/jspsych-survey-likert.js"></script>
+    <script src="jspsych/plugins/jspsych-instructions.js"></script>
+    <script src="jspsych/plugins/jspsych-survey-text.js"></script>
+    <script src="jspsych/plugins/jspsych-survey-multi-select.js"></script>
+    <script src="jspsych/plugins/jspsych-call-function.js"></script>
+    <script src="jspsych/plugins/jspsych-categorize-html.js"></script>
+    <link rel="stylesheet" href="jspsych/css/jspsych.css">
+  </head>
+  <body>
+
+<!--     <div id="videoDiv">
+     <video id="video" src="http://127.0.0.1:4001/videos/<?php $videoFileName?>" width="70%" controls>
+    </div>
+ -->
+  </body>
+  <script>
+
+
+// Initiate timeline
+
+var timeline = [];
+
+// create random subject ID with 8 alphanumeric characters
+
+var rand_subject_id = jsPsych.randomization.randomID(8);
+
+// add the ID to the data for all trials
+
+jsPsych.data.addProperties({ID: rand_subject_id});
+
+// questions for experimenter
+
+var experimenter = {
+  type: 'survey-multi-select',
+  questions: [
+    {
+      prompt: '<b>'+"EXPERIMENTER FILL OUT"+'</b>'+'</b>'+'<br/>'+"I have done the following:",
+      options: ["Confirmed subject's identity (ID card)",
+      "Confirmed normal or corrected-to-normal vision",
+      "Obtained consent (signature and date)",
+      "Checked the test room lighting",
+      "Checked computer screen lighting",
+      "Checked distance from screen to chin rest (50cm)",
+      "Cleaned and adjusted chin rest",
+      "Counterbalanced the order of the tasks",
+      "Opened the experiment in Firefox",
+      "Made the experiment full screen",
+      "Encouraged subject to silence phone, put away distractors, etc."],
+      //horizontal: true,
+      required: true,
+      name: 'Experimenter'
+    },
+  ],
+};
+
+// Set up task instructions
+
+// Set up task instructions
+
+var trial0 = {
+    type: 'instructions',
+    pages: [
+    'Thank you for agreeing to participate in our experiment!'+'</br>'+
+    'Feel free to begin whenever you are ready.'
+    ],
+    show_clickable_nav: true,
+    button_label_next: "Begin"
+};
+
+var demographics = {
+
+  type: 'survey-likert',
+  questions: [
+    {
+      prompt: "First, please provide some demographic information. What is your age?",
+      labels: ['18','19','20','21','22','23','24','25','26','27','28',
+      '29','30', '30+'],
+      //horizontal: true,
+      required: true,
+      name: 'Age'
+    },
+    {
+      prompt: "What was your sex assigned at birth?",
+      labels: ['Male','Female','Prefer not to respond'],
+      //horizontal: true,
+      required: true,
+      name: 'Sex'
+    },
+    {
+      prompt: "What gender do you identify with?",
+      labels: ['Male','Female','Non-binary / Other', 'Prefer not to respond'],
+      //horizontal: true,
+      required: true,
+      name: 'Gender'
+    }
+  ],
+  randomize_question_order: false
+};
+
+var demographics1 = {
+  type: 'instructions',
+  pages: [
+  "Thanks! Let's continue to the instructions..."
+  ],
+  show_clickable_nav: true,
+  button_label_next: "Begin Instructions"
+}
+
+var trial1a = {
+    type: 'instructions',
+    pages: [
+    'In this experiment, you will see pictures on the screen.',
+    'On top of each picture, you will see hotspots showing where '+'<i>'+'another' +'</i>'+' agent paid attention as they looked at the picture.',
+    " For example, here the agent is paying attention to the bananas." +
+    '<br>' +
+    '<img src="EXAMPLE_STIM/example_image.jpg" height="500"></img>',
+    //'<img src="/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_2/61513.bmp_001.jpg" height="500"></img>',
+    ],
+    show_clickable_nav: true
+};
+
+var trial1b = {
+    type: 'instructions',
+    pages: [
+    'And here is the full sequence showing where the agent attended over time'
+    ],
+    show_clickable_nav: true,
+    button_label_next: "View Full Sequence"
+}
+
+var trial2 = {
+  type: 'video-keyboard-response',
+  sources:['EXAMPLE_STIM/example.mp4'],
+  // sources: ['/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_1/54_61513.bmppp151_L1V1_freeview_veridical.mp4',','],
+  // prompt: ['And here is the full sequence showing where the viewer looked over time'],
+  // autoplay: false,
+  // controls: true,
+  choices: "NO_KEYS",
+  trial_ends_after_video: true,
+  height:500
+};
+
+var trial3 = {
+    type: 'instructions',
+    pages: [
+    //Notice that not all of the hotspots are neatly drawn.
+    'The hotspots may not always be neatly drawn. There might be some fuzzy or confusing parts.',
+    'Just try to get a basic sense of where the agent is attending and how they move their attention over time.',
+    "Here's how the experiment will work...",
+    "<p>You will see pairs of attention videos. <br/><br/>One video will show <u>Sandy</u>'s attention moving across an image. <br/>The other video will show <u>Casey</u>'s attention moving across an image.",
+    "After each pair, you will decide which video showed <u>Sandy</u>'s attention and which video showed <u>Casey</u>'s attention.</p>",
+    "<p>The first time you make a decision, you will be guessing.<br/>You will have no way to know which video showed <u>Sandy</u>'s attention and which video showed <u>Casey</u>'s attention.<br/><br/>However, after entering your decision, you will get to see if you were correct.",
+    "After getting feedback on your decisions multiple times, you may start to get a sense for how <u>Sandy</u> and <u>Casey</u> move their attention.<br/><br/>Your ultimate goal is to use the feedback you receive to learn the difference between <u>Sandy</u>'s attention and <u>Casey</u>'s attention.",
+    "You may find this very simple or very challenging.<br/><br/>That's okay, just do your best!"   ],
+    show_clickable_nav: true,
+    button_label_next: "Next"
+};
+
+// var trial3b = {
+//   type:'image-keyboard-response',
+//   stimulus:'EXAMPLE_STIM/keyboard.jpg',
+//   stimulus_height:500,
+//   maintain_aspect_ratio:true,
+//   prompt: [
+//       "<br/>It may help to rest your hand over the '1' and '2' keys during the task.<br/><br/>You will be using these keys to enter your answers."  //+'You can begin the first chunk whenever you are ready!'
+//       ],
+//   show_clickable_nav:true,
+//   button_label_next: "Next"
+// }
+
+var trial3b = {
+    type: 'instructions',
+    pages: [
+    '<img src="EXAMPLE_STIM/keyboard.jpg" style="height:500px;"></img><br/>It may help to rest your hand over the 1 and 2 keys during the task.<br/><br/>You will be using these keys to enter your answers.'],
+    show_clickable_nav: true
+};
+
+
+var trial3c = {
+  type: 'instructions',
+  pages: ['You can begin the first chunk whenever you are ready!'],
+  // sources: ['/Users/kirstenziman/Desktop/Desktop/DIDEC_entire_corpus/analysis_1/54_61513.bmppp151_L1V1_freeview_veridical.mp4',','],
+  // prompt: ['And here is the full sequence showing where the viewer looked over time'],
+  // autoplay: false,
+  // controls: true,
+  show_clickable_nav: true,
+  button_label_next: "Begin"
+};
+
+
+// Push experimenter questions and task instructions to timeline
+timeline.push(experimenter)
+timeline.push(trial0)
+timeline.push(demographics)
+timeline.push(demographics1)
+timeline.push(trial1a)
+timeline.push(trial1b)
+timeline.push(trial2)
+timeline.push(trial3)
+timeline.push(trial3b)
+timeline.push(trial3c)
+
+// Set up break trial instructions
+
+var break1 = {
+    type: 'instructions',
+    pages: [
+    "Great job! You've completed the first chunk of the experiment.",
+    "Feel free to take a break and relax.",
+    "Whenever you're ready to continue, click 'Next'."
+    ],
+    show_clickable_nav: true
+};
+
+var break2 = {
+    type: 'instructions',
+    pages: [
+    "You've just completed the second chunk. Five more to go!",
+    "Feel free to take a break and relax.",
+    "Whenever you're ready, you can hit 'Next' to start the next chunk"
+    ],
+    show_clickable_nav: true
+};
+
+var break3 = {
+    type: 'instructions',
+    pages: [
+    "You've just completed the third chunk. Four more to go!",
+    "Feel free to take a break and relax.",
+    "Whenever you're ready, you can hit 'Next' to start the next chunk"
+    ],
+    show_clickable_nav: true
+};
+
+var break4 = {
+    type: 'instructions',
+    pages: [
+    "You've just completed the fourth chunk. Three more to go!",
+    "Feel free to take a break and relax.",
+    "Whenever you're ready, you can hit 'Next' to start the next chunk"
+    ],
+    show_clickable_nav: true
+};
+
+var break5 = {
+    type: 'instructions',
+    pages: [
+    "You've just completed the fifth chunk. Two more to go!",
+    "Feel free to take a break and relax.",
+    "Whenever you're ready, you can hit 'Next' to start the next chunk"
+    ],
+    show_clickable_nav: true
+};
+
+var break6 = {
+    type: 'instructions',
+    pages: [
+    "You've just completed the sixth chunk. One more to go!",
+    "Feel free to take a break and relax.",
+    "Whenever you're ready, you can hit 'Next' to start the next chunk"
+    ],
+    show_clickable_nav: true
+};
+
+
+var verify = {
+    type: 'instructions',
+    pages: [
+    "You're about to begin the next chunk.",
+    "Remember, for each set of videos, you'll be judging Sandy and Casey's attention.",
+    "Click 'Next' to begin!"
+    ],
+    show_clickable_nav: true
+}
+
+
+var breaks=[break1, break2, break3, break4, break5, break6]
+
+
+// Create video stimuli
+
+//function for getting a random integer in javascript
+function getRndInteger(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+// VERIDICAL <--> SANDY
+// make an array containing all of the veridical videos
+var veridical_videos =
+['STIM_SET_18/1159293.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1159379.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/1159446.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1159470.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/1159482.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1159497.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/1159515.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1159621.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/1159648.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1159675.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/1159777.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1159870.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/1159991.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1160019.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/1160152.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/1160158.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/150296.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/150384.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/150463.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/150496.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1591858.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/1591920.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', //'STIM_SET_18/1591994.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/1592129.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1592201.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/1592241.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1592289.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/1592298.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1592305.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/1592314.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/1592397.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1592519.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/1592619.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1592693.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/1592727.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1592804.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/1592921.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1592951.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/1592971.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1593058.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/1593102.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1593112.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/1593241.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/285610.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/285684.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/285751.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/285896.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+
+'STIM_SET_18/286034.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+
+'STIM_SET_18/497926.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/498039.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/498092.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/498151.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/498170.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/498261.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/498304.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/61537.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/713089.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/713211.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/713274.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/713392.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/713403.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/713519.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/713620.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/713640.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/713666.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/713679.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/713684.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/713689.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/713718.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/713742.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+'STIM_SET_18/713780.bmp_pp65_L3_V1_veridical_freeview_isoFalse_fps144.mp4']
+
+
+// make a corresponding array containing all of the scrambled videos
+
+// SCRAMBLED <--> CASEY
+var scrambled_videos = [
+  'STIM_SET_18/1159293.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1159379.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/1159446.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1159470.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/1159482.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1159497.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/1159515.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1159621.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/1159648.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1159675.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/1159777.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1159870.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/1159991.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1160019.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/1160152.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/1160158.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/150296.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/150384.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/150463.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/150496.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1591858.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/1591920.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', //'STIM_SET_18/1591994.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/1592129.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1592201.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/1592241.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1592289.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/1592298.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1592305.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/1592314.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/1592397.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1592519.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/1592619.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1592693.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/1592727.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1592804.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/1592921.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1592951.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/1592971.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1593058.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/1593102.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/1593112.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/1593241.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/285610.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/285684.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/285751.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/285896.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+
+  'STIM_SET_18/286034.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+
+  'STIM_SET_18/497926.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/498039.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/498092.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/498151.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/498170.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/498261.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/498304.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/61537.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/713089.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/713211.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/713274.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/713392.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/713403.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/713519.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/713620.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/713640.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/713666.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/713679.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/713684.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/713689.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/713718.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4', 'STIM_SET_18/713742.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4',
+  'STIM_SET_18/713780.bmp_pp59_L3_V1_veridical_freeview_isoFalse_fps144.mp4'
+]
+
+// array of both possible prompts, viewers A and B
+var viewer_list = ['<span style="color:Black; font-size:50px;">'+'Sandy','<span style="color:Black; font-size:50px;">'+'Casey']
+var video_list  = ['<span style="color:Black; font-size:50px;">'+'Video 1'+'</span>', '<span style="color:Black; font-size:50px;">'+'Video 2'+'</span>']
+
+// loop through the total number of trials you want in the experiment
+
+// UNCOMMENT THE LINE BELOW TO USE ALL STIMULI
+var num_trials = veridical_videos.length
+
+// var num_trials = 5
+
+// start block tracker to track what block we're in
+var block = 0
+
+// trial type to hide cursor while videos display
+var cursor_off = {
+    type: 'call-function',
+    func: function() {
+        document.body.style.cursor= "none";
+    }
+}
+
+// trial type to turn cursor back on after videos display
+var cursor_on = {
+    type: 'call-function',
+    func: function() {
+        document.body.style.cursor= "auto";
+    }
+}
+
+// (in our case, this is the same as the total number of videos)
+for(i=0; i<num_trials; i++){
+
+  index = getRndInteger(0,veridical_videos.length-1)
+
+  // make stim_list
+  stim_list   = [veridical_videos[index],scrambled_videos[index]]
+
+  // make condition_list
+  cond_list  = ['Sandy','Casey']
+
+  // get rid of these from the full array (no repeats)
+  veridical_videos.splice(index,1); scrambled_videos.splice(index,1)
+
+  // select at random which item to show first
+  first_stim    = getRndInteger(0,1)
+  second_stim   = Math.abs(first_stim-1)
+
+  // based on first_stim, determine which judgement is correct
+  if (first_stim==0){
+    corr = 0
+  } else {
+    corr = 1
+  }
+
+  // Make confidence judgement trial
+  // var confidence = {
+  //     type: 'survey-likert',
+  //     questions: [
+  //       {
+  //         prompt: "How confident are you in your answer?",
+  //         name: "confidence",
+  //         labels: [
+  //           "1"+'<br/>'+"Very"+ '<br/>'+"unsure",
+  //           "2"+'<br/>'+"A little "+'<br/>'+ "unsure",
+  //           "3"+'<br/>'+"A little confident",
+  //           "4"+'<br/>'+"Very confident"
+  //         ],required: true
+  //         }
+  //       ],
+  //     };
+
+  // select at random which is first, viewer A or viewer B
+  // first_viewer  = getRndInteger(0,1)
+  // second_viewer = Math.abs(first_viewer-1)
+
+  var viewer1 = {
+      type: 'html-keyboard-response',
+      stimulus: video_list[0],
+      stimulus_duration: 1500,
+      trial_duration: 1500,
+  };
+
+  var video1 = {
+      type: 'video-keyboard-response',
+      sources: [stim_list[first_stim]],
+      prompt: video_list[0],
+      choices: "NO_KEYS",
+      trial_ends_after_video: true,
+      height:500,
+      condition: [cond_list[first_stim]],
+      data: {
+        agent:     [viewer_list[first_stim]],
+        condition: cond_list[first_stim],
+        image:     stim_list[first_stim]
+      }
+  };
+
+  var viewer2 = {
+      type: 'html-keyboard-response',
+      stimulus: video_list[1],
+      stimulus_duration: 1500,
+      trial_duration: 1500,
+      //choices: "NO_KEYS"
+  };
+
+  var video2 = {
+      type: 'video-keyboard-response',
+      sources: [stim_list[second_stim]],
+      prompt: video_list[1],
+      choices: "NO_KEYS",
+      trial_ends_after_video: true,
+      height:500,
+      condition:[cond_list[second_stim]],
+      data: {
+        agent:     [viewer_list[second_stim]],
+        condition: cond_list[second_stim],
+        image:     stim_list[second_stim]
+      }
+  };
+
+  // establish cr as an editable variable
+  let cr = 100
+
+  // PREVIOUS /////////////////////////////
+  // select at random whether to ask about Sandy or Casey
+  // agent_rand    = getRndInteger(0,1)
+  // agent_str     = ['<span style="font-size:30px">'+"Sandy's"+'</span>','<span style="font-size:30px">'+"Casey's"+'</span>'][agent_rand]
+  ////////////////////////////////////////
+
+  // SUBJECT 1: Always ask about SANDY
+  agent_rand    = getRndInteger(0,0)
+  agent_str     = ['<span style="font-size:30px">'+"Sandy's"+'</span>','<span style="font-size:30px">'+"Casey's"+'</span>'][agent_rand]
+
+  // if the agent selected matches the first stim selected, the correct answer is 0 (Video 1)
+  // otherwise, the correct answer is 1 (Video 2)
+  if(agent_rand!=first_stim){
+    cr=1}else{
+    cr=0}
+
+  // decision trial
+  // var judge = {
+  //   type: 'survey-likert-feedback',
+  //   questions:
+  //     [
+  //     {prompt: "Which video showed "+agent_str+" attention?",
+  //     name:"judgement",
+  //     labels: ['<span style="color:Black; font-size:20px;">'+'Video 1'+'</span>',
+  //     '<span style="color:Black; font-size:20px;">'+'Video 2'+'</span>'],
+  //     required: true}
+  //     ],
+  //   data:
+  //     {
+  //     correct_answer: cr
+  //     }
+  // };
+
+
+ correct_string = String(cr+1)
+
+ var judge = {
+   type: 'categorize-html',
+   stimulus: "Which video showed "+agent_str+" attention?",
+   choices: ['1','2'],
+   key_answer: String(49+cr),
+   //text_answer: "correct",
+   prompt: "<br/><br/>Press 1 for Video 1<br/><br/>Press 2 for Video 2",
+   show_stim_with_feedback: false,
+   //correct_text: "correct",
+   incorrect_text: '<p id="incorrect">wrong</p>',
+   correct_text: '<p id="correct">correct</p>'
+ };
+
+  // decision trial
+  // var judge = {
+  //   type: 'survey-likert',
+  //   questions:
+  //     [
+  //     {prompt: "Which video showed "+agent_str+" attention?",
+  //     name:"judgement",
+  //     labels: ['<span style="color:Black; font-size:20px;">'+'Video 1'+'</span>',
+  //     '<span style="color:Black; font-size:20px;">'+'Video 2'+'</span>'],
+  //     required: true}
+  //     ],
+  //   data:
+  //     {
+  //     correct_answer: cr
+  //     }
+  // };
+
+  c = '<span style="color:Green; font-size:50px;">'+"Correct"+'</span>'
+  d = '<span style="color:Red; font-size:50px;">'+"Wrong"+'</span>'
+
+  //blank after feedback
+  var post_feedback = {
+    type: 'html-keyboard-response',
+    stimulus: " ", //video_list[1],
+    stimulus_duration: 500,
+    trial_duration: 500,
+    choices: "NO_KEYS"
+  }
+
+  timeline.push(cursor_off)
+  timeline.push(viewer1)
+  timeline.push(video1)
+  timeline.push(viewer2)
+  timeline.push(video2)
+  timeline.push(cursor_on)
+  timeline.push(judge)
+  //timeline.push(feedback)
+  timeline.push(post_feedback)
+  //timeline.push(confidence)
+
+  // if length(i)/16 has no remainder
+  if (((i+1)%10==0)&&(i!=69)){
+    timeline.push(breaks[block])
+    timeline.push(verify)
+    block+=1
+  }
+  }
+
+// Create ending trials
+
+var closing0 = {
+    type: 'instructions',
+    pages: [
+    "Awesome job! You have finished the last chunk." +'</br></br>'+'We just have a few final questions for you.'
+    ],
+    show_clickable_nav: true
+};
+
+//////////////////////////////////////////////////////////////////////////
+var closing00 = {
+    type: 'instructions',
+    pages: [
+    "Please fill out the following three free response questions to the best of your ability."
+    ],
+    show_clickable_nav: true
+};
+
+// // START: REMOVED FOR LEARNING TASK /////////////////////////////////////
+//
+// var closing00 = {
+//     type: 'instructions',
+//     pages: [
+//     "Please fill out the following ten multiple choice questions and three free response questions to the best of your ability."
+//     ],
+//     show_clickable_nav: true
+// };
+//
+// var closing01a = {
+//       type: 'survey-likert',
+//       questions: [
+//         {
+//           prompt:'<b>'+"For the videos that I judged to be "+'<span style="color: red">'+"more human:"+'</span>'+'</b>'+'<br/>'+"When I saw the attention hotspots, I felt that another conscious agent was looking at the image.",
+//           name: "post-1",
+//           labels: [
+//             "1"+'<br/>'+"Never /"+'<br/>'+"Almost never",
+//             "2"+'<br/>'+"Sometimes",
+//             "3"+'<br/>'+"Often",
+//             "4"+'<br/>'+"Always /"+'<br/>'+"Almost always"
+//           ],required: true
+//           }
+//         ],
+//       }
+//
+// var closing02a = {
+//       type: 'survey-likert',
+//       questions: [
+//         {
+//           prompt: '<b>'+"For the videos that I judged to be "+'<span style="color: red">'+"more human:"+'</span>'+'</b>'+'<br/>'+"When I saw the attention hotspots, I couldn't help but feel there was another conscious agent looking at the image - it was automatic. ",
+//           name: "post-2",
+//           labels: [
+//             "1"+'<br/>'+"Never /"+'<br/>'+"Almost never",
+//             "2"+'<br/>'+"Sometimes",
+//             "3"+'<br/>'+"Often",
+//             "4"+'<br/>'+"Always /"+'<br/>'+"Almost always"
+//           ],required: true
+//           }
+//         ],
+//       }
+//
+// var closing03a = {
+//       type: 'survey-likert',
+//       questions: [
+//         {
+//           prompt: '<b>'+"For the videos that I judged to be "+'<span style="color: red">'+"more human:"+'</span>'+'</b>'+'<br/>'+"It felt like the other agent was moving its attention in the same ways that I would.",
+//           name: "post-3",
+//           labels: [
+//             "1"+'<br/>'+"Never /"+'<br/>'+"Almost never",
+//             "2"+'<br/>'+"Sometimes",
+//             "3"+'<br/>'+"Often",
+//             "4"+'<br/>'+"Always /"+'<br/>'+"Almost always"
+//           ],required: true
+//           }
+//         ],
+//       }
+//
+// var closing04a = {
+//       type: 'survey-likert',
+//       questions: [
+//         {
+//           prompt: '<b>'+"For the videos that I judged to be "+'<span style="color: red">'+"more human:"+'</span>'+'</b>'+'<br/>'+"It felt as if the attention on the screen was actually my own, not another agent's.",
+//           name: "post-4",
+//           labels: [
+//             "1"+'<br/>'+"Never /"+'<br/>'+"Almost never",
+//             "2"+'<br/>'+"Sometimes",
+//             "3"+'<br/>'+"Often",
+//             "4"+'<br/>'+"Always /"+'<br/>'+"Almost always"
+//           ],required: true
+//           }
+//         ],
+//       }
+//
+// var closing05a = {
+//       type: 'survey-likert',
+//       questions: [
+//         {
+//           prompt: '<b>'+"For the videos that I judged to be "+'<span style="color: red">'+"more human:"+'</span>'+'</b>'+'<br/>'+"The attention felt robotic or mechanical.",
+//           name: "post-5",
+//           labels: [
+//             "1"+'<br/>'+"Never /"+'<br/>'+"Almost never",
+//             "2"+'<br/>'+"Sometimes",
+//             "3"+'<br/>'+"Often",
+//             "4"+'<br/>'+"Always /"+'<br/>'+"Almost always"
+//           ],required: true
+//           }
+//         ],
+//       }
+
+// END: REMOVED FOR LEARNING TASK /////////////////////////////////////
+
+var closing1 = {
+  type: 'survey-text',
+  // preamble: `<img src="img/navarro_burst_03.jpg" style="width:400px;"></img>`,
+  questions: [
+    {prompt: 'Please briefly describe your experience - specifically, tell us anything you think it would be important for us to know!', rows: 5}
+  ]
+}
+
+var closing2 = {
+  type: 'survey-text',
+  // preamble: `<img src="img/navarro_burst_03.jpg" style="width:400px;"></img>`,
+  questions: [
+    {prompt: 'What did you find easiest about the experiment? Did you use any particular strategies?', rows: 5}
+  ]
+}
+
+
+var closing3 = {
+  type: 'survey-text',
+  // preamble: `<img src="img/navarro_burst_03.jpg" style="width:400px;"></img>`,
+  questions: [
+    {prompt: 'What did you find most difficult about the experiment?', rows: 5}
+  ]
+}
+
+var closing4 = {
+    type: 'instructions',
+    pages: [
+    "That's it, you're all done!"+'</br>'+"Thank you for your participation!"
+    ],
+    trial_duration: 30,
+    show_clickable_nav: true,
+    button_label_next: "End Experiment"
+};
+
+var experimenter_end = {
+  type: 'survey-multi-select',
+  questions: [
+    {
+      prompt: '<b>'+"EXPERIMENTER FILL OUT"+'</b>'+'</b>'+'<br/>'+"I have done the following:",
+      options: [
+      "Printed ID# "+rand_subject_id+" on consent form",
+      "Given subject SONA credit or payment",
+      "Given the subject debrief form", ],
+      //horizontal: true,
+      required: true,
+      name: 'Experimenter_end'
+    },
+  ],
+};
+
+timeline.push(closing0)
+timeline.push(closing00)
+
+// timeline.push(closing01a)
+// timeline.push(closing02a)
+// timeline.push(closing03a)
+// timeline.push(closing04a)
+// timeline.push(closing05a)
+
+timeline.push(closing1)
+timeline.push(closing2)
+timeline.push(closing3)
+timeline.push(closing4)
+timeline.push(experimenter_end)
+
+// Run the experiment
+
+jsPsych.init({
+  timeline: timeline,
+  override_safe_mode: false,
+  // preload_videos: ["fish.mp4',',"],
+  on_finish: function(){
+    jsPsych.data.displayData('json')
+    jsPsych.data.get().localSave('csv',rand_subject_id+'_SUB3_LEARNING.csv');
+    jsPsych.data.get().localSave('json',rand_subject_id+'_SUB3_LEARNING.json');
+  }
+  })
+</script>
+</html>
