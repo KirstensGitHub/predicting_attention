@@ -3,7 +3,7 @@
 # created by Kirsten Ziman, 9/13/22
 
 # Note: functions not created by Kirsten Ziman cite the original source
-#       these functions begin at line 
+#       these functions begin at line
 
 import os
 from matplotlib import pyplot as plt
@@ -23,12 +23,12 @@ def rename_df(splitso, this_version):
     INPUT:
     splitso      - pandas dataframe containing full gaze data from one subject for one image
     this_version - version of the image list this data is from
-    
+
     OUTPUT:
     splitso      - original dataframe but with appropriately renamed columns for easy analysis
     '''
-    
-    thirteen = False; 
+
+    thirteen = False;
 
     if 13 in splitso.columns:
         for x in list(splitso[13].unique()):
@@ -49,7 +49,7 @@ def rename_df(splitso, this_version):
                                          13:"L Event Info", 14:"R Event Info", 15:"Stimulus"})
     else:
         print('Incoherent list version number!')
-        
+
     return(splitso)
 
 
@@ -57,23 +57,23 @@ def make_splitso(sub, dat_string, this_list, this_version):
     '''
     INPUT:
     dat_string - path to trial data
-    
+
     OUTPUT:
     splitso    - pandas dataframe containing desired trial data w/ appropriate column names, float values, etc.
     '''
-    
+
     df         = pd.read_csv(dat_string, sep=" ", skiprows=None, skipinitialspace=True, skip_blank_lines=True, header=41)
     splitso    = df['Time\tType\tTrial\tL'].str.split('\t', expand=True)
     splitso    = rename_df(splitso, this_version)[1:]
-    
+
     splitso['L POR X [px]'] = splitso['L POR X [px]'].astype(float)
     splitso['L POR Y [px]'] = splitso['L POR Y [px]'].astype(float)
     splitso['subject']      = sub
     splitso['list']         = this_list
     splitso['version']      = this_version
-    
+
     return(splitso)
-    
+
 
 def get_gaze(sub, this_list, this_version, image):
     '''
@@ -81,9 +81,9 @@ def get_gaze(sub, this_list, this_version, image):
     sub          - string indicating subject ID (example: 'pp151')
     this_list    - int indicating which List the image is from (1, 2, or 3)
     this_version - int indicating which Version of this_list the data is from (1 or 2)
-    
+
     OUTPUTS:
-    gaze_data    - df containing sub's full gaze data for image 
+    gaze_data    - df containing sub's full gaze data for image
     '''
 
     subdir     = '../Free_viewing/List'+str(this_list)+'_ALL/'+sub+'/eye'
@@ -115,7 +115,7 @@ def get_gaze(sub, this_list, this_version, image):
         print(this_version)
         free_view = []
         print(splitso.head())
-        
+
     return(free_view)
 
 
@@ -123,14 +123,14 @@ def get_fixies(free_view):
     """
     INPUT:
     free_view  - gaze data from one subject for one image
-    
+
     OUTPUT:
     fixie_list - list of ints of length #-of-fixations
                - the value of each int reflects which chunk the corresponding fixation point belongs to
     """
-    
+
     events = list(free_view['L Event Info'])
-    fixation_chunk = 1 
+    fixation_chunk = 1
     fixie_list = []
 
     for idx,x in enumerate(events[:-1]):
@@ -138,13 +138,13 @@ def get_fixies(free_view):
             fixie_list.append(fixation_chunk)
             if events[idx+1] != 'Fixation':
                 fixation_chunk += 1
-    
+
     if events[-1] == 'Fixation':
         if events[-2] == 'Fixation':
             fixie_list.append(fixation_chunk)
         else:
             fixie_list.append(fixation_chunk+1)
-                
+
     return fixie_list
 
 
@@ -153,7 +153,7 @@ def check_fix_numbers(fixie_list, free_view):
     INPUT:
     fixie list - output of get_fixies function
     free_view  - output of get_gaze function
-    
+
     OUTPUT:
     value      - boolean - True if fixie_list is correct length
     '''
@@ -166,39 +166,39 @@ def check_fix_numbers(fixie_list, free_view):
 
 def make_the_dicts(free_view):
     '''
-    INPUT: 
+    INPUT:
     splitso - pandas dataframe containing gaze data from one subject for one image
-    
+
     OUTPUT:
     dict    - dictionary format of data and image to pass into plotting functions
     '''
-    
-    xs = free_view[free_view['L Event Info']=='Fixation']['L POR X [px]'] 
-    ys = free_view[free_view['L Event Info']=='Fixation']['L POR Y [px]'] 
+
+    xs = free_view[free_view['L Event Info']=='Fixation']['L POR X [px]']
+    ys = free_view[free_view['L Event Info']=='Fixation']['L POR Y [px]']
     tuple_list = []
-    
+
     for x,y in zip(xs,ys):
         tuple_list = tuple_list+[(np.rint(x),np.rint(y))]
-        the_dict = {'image':free_view['Stimulus'][1], 'fixations': tuple_list, 'subject':free_view['subject'].unique(),'list':free_view['list'].unique(), 'version':free_view['version'].unique()} 
-        
+        the_dict = {'image':free_view['Stimulus'][1], 'fixations': tuple_list, 'subject':free_view['subject'].unique(),'list':free_view['list'].unique(), 'version':free_view['version'].unique()}
+
     return the_dict
 
 def get_addin(q):
     '''
     INPUT:
     q - int indicating the number of the image that's being generated
-    
+
     OUTPUT:
     addin - string to include in the jpeg filename so that files/filenames are ordered correctly for video compilation
     '''
-    
+
     addin = '_'
-    
+
     if q<10:
         addin = addin+'00'
     elif q>=10 and q<100:
         addin = addin+'0'
-        
+
     return(addin)
 
 def get_framerate():
@@ -212,7 +212,7 @@ def get_framerate():
 
     # total frames / total seconds  --> frames per second
     frame_rate = math.floor(num_images/3)
-    
+
     return(frame_rate)
 
 def remove_jpegs():
@@ -226,22 +226,22 @@ def remove_jpegs():
 def first_bounds_update(x1_vals,y1_vals,b):
 	'''
 	INPUTS:
-	x1_vals - list of length 2 
+	x1_vals - list of length 2
 				  - first list item: smallest x val encountered so far
 				  - second list iftem: largest x val encountered so far
 
-	y1_vals - list of length 2 
+	y1_vals - list of length 2
 				  - first list item: smallest y val encountered so far
 				  - second list iftem: largest y val encountered so far
 
 	b       - tuple - new tuple to compare with current values
 
 	OUTPUTS:
-	x1_vals - list of length 2 
+	x1_vals - list of length 2
 				  - first list item: smallest x val encountered so far, given b
 				  - second list iftem: largest x val encountered so far, given b
 
-	y1_vals - list of length 2 
+	y1_vals - list of length 2
 				  - first list item: smallest y val encountered so far, given b
 				  - second list iftem: largest y val encountered so far, given b
 
@@ -268,11 +268,11 @@ def first_bounds_update(x1_vals,y1_vals,b):
 def one_centered(x1_vals, y1_vals):
 	'''
 	INPUTS:
-	x1_vals - list of length 2 
+	x1_vals - list of length 2
 					- first list item: smallest x val in first attention hotspot
 					- second list iftem: largest x val in first attention hotspot
 
-	y1_vals - list of length 2 
+	y1_vals - list of length 2
 				  - first list item: smallest y val in first attention hotspot
 				  - second list iftem: largest y val in first attention hotspot
 
@@ -319,17 +319,17 @@ def one_centered(x1_vals, y1_vals):
 def movie_maker(fixations, dictionary, this_list, this_version, stim_type, isolated=False):
     '''
     INPUTS:
-    
+
     fixations  - pandas dataframe containing only fixation data from one subject viewing one image
-    dictionary - dictionary containing two keys, one with the image name and one with the fixaiton coordinates 
+    dictionary - dictionary containing two keys, one with the image name and one with the fixaiton coordinates
     stim_type  - string describing the type of attention stimulus to make: veridical / scrambled / mismatched / reversed
     isolated   - boolean describing whether the attention will be isolated (True) or be overlaid on an image (False)
-            
-    OUTPUTS: 
-    
+
+    OUTPUTS:
+
     technically, none
-    
-    This will create and save two files: 
+
+    This will create and save two files:
     - mp4 video of the attention video stimulus
     - csv containing video metadata
         - # of attention chunks (num_chunks)
@@ -337,7 +337,7 @@ def movie_maker(fixations, dictionary, this_list, this_version, stim_type, isola
         - image filename (dictionary['image'])
         - subject ID (dictionary['subject'])
     '''
-    
+
     # This function can make veridical and scrambled attention spotlight videos, isolated or overlaid on an image
 
     lengths = []; movie_frames = []; total_counter = 0
@@ -356,10 +356,10 @@ def movie_maker(fixations, dictionary, this_list, this_version, stim_type, isola
 
         # record how many chunks stay in the same place (besides the first one), if any
         number_same = sum(x == y for x, y in zip(order, list(range(1, len(order)+1))))-1
-            
-        # for each fixation chunk 
+
+        # for each fixation chunk
         for x in order:
-    
+
             length_counter = 0; tuple_list = []; total_list = []
 
             # for first chunk, collect the largest and smallest x and y vals
@@ -377,17 +377,17 @@ def movie_maker(fixations, dictionary, this_list, this_version, stim_type, isola
                     total_list.append(total_counter)
                     if x==1:
                     	x1_vals,y1_vals = first_bounds_update(x1_vals,y1_vals,b)
-            
+
             # determine if first hotspot contains center of screen
             first_centered   = one_centered(x1_vals, y1_vals)
             reverse_centered = one_centered(y1_vals, x1_vals)
 
             # pass into plotting function
-            plot_heatmap({'image':dictionary['image'], 'fixations':tuple_list}, 
-                         filename='/Users/kirstenziman/Downloads/images_with_borders/Images_resized_greyborders/List'+str(this_list)+'/' + dictionary['image'], 
+            plot_heatmap({'image':dictionary['image'], 'fixations':tuple_list},
+                         filename='/Users/kirstenziman/Downloads/images_with_borders/Images_resized_greyborders/all/' + dictionary['image'],
                          alpha=.6, cmap="Greys_r", clean=False, isolated=isolated, other=None, l=this_list)
-            
-            # save jpegs    
+
+            # save jpegs
             for q in total_list:
                 addin = get_addin(q)
                 plt.savefig(dictionary['image']+addin+str(q)+'.jpg')
@@ -405,7 +405,7 @@ def movie_maker(fixations, dictionary, this_list, this_version, stim_type, isola
             .output(dictionary['image']+ending+'.mp4')
             .run()
             )
-            
+
             # remove leftover jpeg images
             remove_jpegs()
 
@@ -422,7 +422,6 @@ def movie_maker(fixations, dictionary, this_list, this_version, stim_type, isola
 
     else:
         print('len(k) <= 2: '+dictionary['image'])
-
 
 ########################################################################
 # the functions below are from : https://didec.uvt.nl/pages/download.html
@@ -482,11 +481,16 @@ def buildFixMap(fixations, doBlur=True, sigma=19, display=(1050, 1680)):
     """
     sal_map = np.zeros(display)
     for x,y in fixations:
-        if y<=1050.00 and x<=1680.00:
+        #if y<=1050.00 and x<=1680.00:
+        #KZ updated to y<1050.00 and x<1680.00
+        if y<1050.00 and x<1680.00:
             sal_map[int(y)][int(x)]=1
-            # KZ #sal_map[y][x] = 1 
+            # KZ #sal_map[y][x] = 1
+        # note: some stimuli were created with the original y<= and x<= line of code (line 484)
+        # however, in these cases any datapoints on the edge caused an 'out of bounds' error and were removed or the stimulus was replaced
         else:
             print('one gazepoint detected out of bounds')
+            # for datapoints out of bounds, do not include them in our heatmap and print a warning
     if doBlur:
         sal_map = ndimage.filters.gaussian_filter(sal_map, sigma)
         sal_map -= np.min(sal_map)
@@ -508,7 +512,7 @@ def CC_score(gtsAnn, resAnn):
     """
     Computer CC score. A simple implementation
     From the SALICON codebase.
-    
+
     :param gtsAnn : ground-truth fixation map
     :param resAnn : predicted saliency map
     :return score: int : score
@@ -519,11 +523,11 @@ def CC_score(gtsAnn, resAnn):
     salMap = resAnn - np.mean(resAnn)
     if np.max(salMap) > 0:
         salMap = salMap / np.std(salMap)
-    
+
     return np.corrcoef(salMap.reshape(-1), fixationMap.reshape(-1))[0][1]
 
 
-# KZ added "isolated attention" option 
+# KZ added "isolated attention" option
 #def plot_heatmap(data, filename='test.pdf', alpha=0.7, cmap='jet', clean=True):
 def plot_heatmap(data, filename='test.pdf', alpha=0.7, cmap='jet', clean=True, isolated=False, other=None, l=1):
     """
@@ -532,14 +536,14 @@ def plot_heatmap(data, filename='test.pdf', alpha=0.7, cmap='jet', clean=True, i
     """
     # Load data
     image      = data['image']
-    image_path = '/Users/kirstenziman/Downloads/images_with_borders/Images_resized_greyborders/List '+str(l)+'/'+data['image'] # IMAGE_PATHS[image]
+    image_path = '/Users/kirstenziman/Downloads/images_with_borders/Images_resized_greyborders/all/'+data['image'] # IMAGE_PATHS[image]
     #KZ update from ndimage to imageio #image_data = ndimage.imread(image_path)
     image_data = imageio.imread(image_path)
     heatmap    = buildFixMap(data['fixations'])
     # Remove haze.
     if clean:
         heatmap = clean_heatmap(heatmap)
-    
+
     # Matplotlib.
     # Borrows heavily from from Edwin Dalmaijer's `gazeplotter.py` script, from the PyGaze codebase.
     dpi = 100
@@ -549,15 +553,15 @@ def plot_heatmap(data, filename='test.pdf', alpha=0.7, cmap='jet', clean=True, i
     ax = plt.Axes(fig, [0,0,1,1])
     ax.set_axis_off()
     fig.add_axes(ax)
-    
+
     if isolated == False and other == None:
         ax.imshow(image_data)
         # KZ moved ax.imshow(image_data) into if statement for "isolated attention" option
-    
+
     elif other != None:
         image_data= imageio.imread(other)
         ax.imshow(image_data)
         print(other)
-        
+
     ax.imshow(heatmap, cmap=cmap, alpha=alpha)
     #KZ commented out: #fig.savefig(filename)
