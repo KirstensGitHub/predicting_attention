@@ -1,3 +1,5 @@
+# Stimulus Generation 
+
 In order to generate the stimuli from scratch, you will need to download the images and eye tracking data from the Dutch Imaging Description and Eye Tracking Corpus:
 
 https://didec.uvt.nl/pages/download.html
