@@ -6,3 +6,5 @@ This includes materials to:
 - generate experiment stimuli (`./stimuli`)
 - run the experiments (`./experiment`)
 - analyze the resulting data (`./analysis`)
+
+as well as the anonymized data `./analysis/data`
