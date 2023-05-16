@@ -1,1 +1,3 @@
-This directory contains the experiment code (.html file) and video stimuli (.zip file) for each experiment (1-8) in our article Predicting the Attention of Others (under review at PNAS as of 5/23). To run a version of the experiment, go into the relevant folder, unzip the stimulus zip file(s) then double click the `.html` file to open the experiment in your default web browser.
+This directory contains the experiment code (.html file) and video stimuli (.zip file) for each experiment (1-8) in our article Predicting the Attention of Others (under review at PNAS as of 5/23). 
+
+To run a version of the experiment, go into the relevant folder, unzip the stimulus zip file(s) then double click the `.html` file to open the experiment in your default web browser.
