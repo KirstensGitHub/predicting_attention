@@ -2,14 +2,14 @@
 
 ### This repository contains code pertaining to the research article Predicting the Attention of Others (under review at PNAS as of 5/23).
 
-### This includes materials to:
+### It includes materials to:
 - generate experiment stimuli (`./stimuli`)
 - run the experiments (`./experiment`)
 - analyze the resulting data (`./analysis`)
 
 as well as the anonymized data from our study `./analysis/data`
 
-### To view video stimuli:
+### If you want to view our video stimuli:
 - download the repository
 - in `predicting_attention/experiments/` go to the folder for the specific expeirment you're interested in
 - unzip the zip file you find in that folder
