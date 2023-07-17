@@ -10,3 +10,5 @@ The data we used to generate our stimuli were as follows (accessed 7/2022-4/2023
 Note that the image and eye tracking data are split into directories by list number and version number. In some cases, for convenience, we grouped all of the data into a single directory for stimulus creation. You may need to rearrange the data within directories and update filepaths in the stimulus generation code appropriately.
 
 Note also that no stimulus generation code is provided for experiment 8; it utilizes the same video stimuli as Experiment 1 in the context of a different experimental paradigm.
+
+For questions regarding stimulus generation, please contact: kz0108@princeton.edu or kirstenkmbziman@gmail.com
