@@ -22,4 +22,4 @@ as well as the anonymized data from our study `./analysis/data`
 - unzip the .zip folder there (e.g. `STIM_SET_1.zip`)
 - double click on the html file (e.g `experiment_1.html`)
 - the experiment should pop up in your web browser :)
-- NOTE: on some experiment screens, the experiment should display videos for you to watch. If the videos do not display and/or you instead see a blank white screen, open the `.html` file and check if the file paths need updating 
+- NOTE: on some experiment screens, the experiment should display videos for you to watch. If the videos do not display and/or you instead see a blank white screen, open the `.html` file in a text editor (e.g. Atom, TextEdit, etc.) and check if the file paths need updating 
