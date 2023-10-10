@@ -1,6 +1,6 @@
 # Predicting the Attention of Others
 
-### This repository contains code pertaining to the research article Predicting the Attention of Others (under review at PNAS as of 5/23).
+### This repository contains code pertaining to the research article [Predicting the Attention of Others](https://www.pnas.org/doi/abs/10.1073/pnas.2307584120?af=R).
 
 ### It includes materials to:
 - generate experiment stimuli (`./stimuli`)
