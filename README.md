@@ -15,11 +15,12 @@ as well as the anonymized data from our study `./analysis/data`
 - unzip the zip file you find in that folder
 - go into the unzipped folder and play the mp4 files you find there
 
-### If you want to try the experiment yourself (e.g. experiment 1):
+### If you want to run the experiment yourself (e.g. experiment 1):
 - download the repository
 - go into the `experiments` folder
 - go into the folder for the experiment of interest (e.g. `experiment_1`)
 - unzip the .zip folder there (e.g. `STIM_SET_1.zip`)
 - double click on the html file (e.g `experiment_1.html`)
-- the experiment should pop up in your web browser :)
-- NOTE: on some experiment screens, the experiment should display videos for you to watch. If the videos do not display and/or you instead see a blank white screen, open the `.html` file in a text editor (e.g. Atom, TextEdit, etc.) and check if the file paths need updating 
+- the experiment should pop up in your web browser :) 
+- NOTE: We used Firefox version 44.0.2 for mac (downloadable here: https://ftp.mozilla.org/pub/firefox/releases/44.0.2/). In different browsers, the experiment may display slightly differently. 
+- NOTE: If the videos do not display and/or you instead see a blank white screen during the experiment, open the `.html` file in a text editor (e.g. Atom, TextEdit, etc.) and check if the file paths need updating 
