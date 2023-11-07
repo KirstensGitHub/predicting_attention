@@ -22,5 +22,5 @@ as well as the anonymized data from our study `./analysis/data`
 - unzip the .zip folder there (e.g. `STIM_SET_1.zip`)
 - double click on the html file (e.g `experiment_1.html`)
 - the experiment should pop up in your web browser :) 
-- NOTE: To replicate our procedure, use Firefox version 44.0.2 for mac (downloadable here: https://ftp.mozilla.org/pub/firefox/releases/44.0.2/). In different browsers, the experiment may display slightly differently. 
+- NOTE: To replicate our procedure, use Firefox version 44.0.2 (downloadable here: https://ftp.mozilla.org/pub/firefox/releases/44.0.2/) on Mac OS X 10.11. In different browsers & systems, the experiment may display differently. For example, in our experiment, the browser did not allow participants to end a trial without submitting answers, the broswer displayed experiment at a frame rate of around 60 fps, and so on. In different browsers, these and other aspects might differ. Safari, for example, allows participants to bypass a trial without entering a response -- a significant departure in the design of the experiment.)
 - NOTE: If the videos do not display and/or you instead see a blank white screen during the experiment, open the `.html` file in a text editor (e.g. Atom, TextEdit, etc.) and check if the file paths need updating 
