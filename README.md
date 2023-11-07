@@ -21,6 +21,8 @@ as well as the anonymized data from our study `./analysis/data`
 - go into the folder for the experiment of interest (e.g. `experiment_1`)
 - unzip the .zip folder there (e.g. `STIM_SET_1.zip`)
 - double click on the html file (e.g `experiment_1.html`)
-- the experiment should pop up in your web browser :) 
-- NOTE: To replicate our procedure, use Firefox version 44.0.2 (downloadable here: https://ftp.mozilla.org/pub/firefox/releases/44.0.2/) on Mac OS X 10.11. In different browsers & systems, the experiment may display significantly differently. For example, in our experiment, the browser did not allow participants to end a trial without submitting answers, the browser displayed the experiment at around 60 frames per second, and so on. In different browsers, these and other aspects may differ. Safari, for example, allows participants to bypass a trial without entering a response -- a significant departure in the design of the experiment.)
-- NOTE: If the videos do not display and/or you instead see a blank white screen during the experiment, open the `.html` file in a text editor (e.g. Atom, TextEdit, etc.) and check if the file paths need updating 
+- the experiment should pop up in your web browser :)
+  
+NOTE: To replicate our procedure, use Firefox version 44.0.2 (downloadable here: https://ftp.mozilla.org/pub/firefox/releases/44.0.2/) on Mac OS X 10.11. In different browsers & systems, the experiment may display significantly differently. For example, in our experiment, the browser did not allow participants to end a trial without submitting answers, the browser displayed the experiment at around 60 frames per second, and so on. In different browsers, these and other aspects may differ. Safari, for example, allows participants to bypass a trial without entering a response -- a significant departure in the design of the experiment.)
+
+NOTE: If the videos do not display and/or you instead see a blank white screen during the experiment, open the `.html` file in a text editor (e.g. Atom, TextEdit, etc.) and check if the file paths need updating 
